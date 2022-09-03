@@ -9,7 +9,7 @@ import java.lang.RuntimeException
 object ItemRepositoryImpl : ItemRepository {
 
     private val repositoryLD = MutableLiveData<List<Item>>()
-    private val repository = mutableListOf<Item>()
+    private val repository = sortedSetOf<Item>({o1, o2 -> o1.id.compareTo(o2.id)})
 
     private var autoincroment = 0
 
