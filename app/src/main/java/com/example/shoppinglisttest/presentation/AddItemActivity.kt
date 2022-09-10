@@ -18,8 +18,8 @@ class AddItemActivity : AppCompatActivity(){
     lateinit var nameView : TextInputLayout
     lateinit var countView : TextInputLayout
     lateinit var saveView : Button
-    lateinit var viewModel: MainViewModel
-
+    lateinit var viewModel: AddItemViewModel
+    var oldItem : Item? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
@@ -28,18 +28,23 @@ class AddItemActivity : AppCompatActivity(){
         nameView = findViewById(R.id.title)
         countView = findViewById(R.id.count)
         saveView = findViewById(R.id.save)
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
-
+        viewModel = ViewModelProvider(this).get(AddItemViewModel::class.java)
+        val oldItemId = intent.getIntExtra(SET_ITEM,-2)
+        if (oldItemId != -2){
+            oldItem = viewModel.findItem(oldItemId)
+            nameView.editText?.setText(oldItem!!.name)
+            countView.editText?.setText(oldItem!!.count)
+        }
     }
-
 
 
     fun clickSave(view: View) {
-        val newItem = Item(nameView.editText.toString(),
-            countView.editText.toString().toInt(),
-            true)
-
+        if (oldItem != null){
+            viewModel.setItem(oldItem!!)
+        }else{
+            viewModel.addItem(nameView.editText.toString(),countView.editText.toString().toInt())
+        }
+        //redirect
     }
-
 
 }

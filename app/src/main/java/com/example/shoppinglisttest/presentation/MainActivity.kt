@@ -1,9 +1,11 @@
 package com.example.shoppinglisttest.presentation
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ListAdapter
 import android.widget.TextView
@@ -12,18 +14,30 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglisttest.R
 import com.example.shoppinglisttest.domain.Item
+import com.example.shoppinglisttest.presentation.recycler_view_tools.ShopAdapter
+
+
+const val SET_ITEM = "set_Item"
+
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var recyclerView : RecyclerView
     lateinit var viewModel: MainViewModel
+    lateinit var addButtonView : Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         recyclerView = findViewById(R.id.rv_shop_list)
+        addButtonView = findViewById(R.id.button_add_shop_item)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         setRecyclerView()
+
+        addButtonView.setOnClickListener {
+            val intent = Intent(this,AddItemActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     fun setRecyclerView(){
@@ -34,15 +48,14 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun setListener(
-        adapter: ShopAdapter,
-        rv: RecyclerView?
-    ) {
+    private fun setListener(adapter: ShopAdapter, rv: RecyclerView?) {
         adapter.onItemLongClikListener = {
             viewModel.changeEnable(it)
         }
         adapter.onItemShotClikListener = {
-            Log.d("test", "${it.name} ${it.count} ${it.enable}")
+            val intent = Intent(this,AddItemActivity::class.java)
+            intent.putExtra(SET_ITEM,it.id)
+            startActivity(intent)
         }
 
         viewModel.shopList.observe(this) {
@@ -70,3 +83,4 @@ class MainActivity : AppCompatActivity() {
 
 
 }
+

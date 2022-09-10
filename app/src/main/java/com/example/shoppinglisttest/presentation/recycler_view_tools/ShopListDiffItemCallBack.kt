@@ -1,4 +1,4 @@
-package com.example.shoppinglisttest.presentation
+package com.example.shoppinglisttest.presentation.recycler_view_tools
 
 import androidx.recyclerview.widget.DiffUtil
 import com.example.shoppinglisttest.domain.Item

@@ -1,19 +1,16 @@
-package com.example.shoppinglisttest.presentation
+package com.example.shoppinglisttest.presentation.recycler_view_tools
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglisttest.R
 import com.example.shoppinglisttest.domain.Item
+import com.example.shoppinglisttest.presentation.recycler_view_tools.ShopListDiffItemCallBack
+import com.example.shoppinglisttest.presentation.recycler_view_tools.ShopViewHolder
 
 const val ENABLE_TYPE = 1
 const val DISABLED_TYPE = 2
-class ShopAdapter() : ListAdapter<Item,ShopViewHolder>(ShopListDiffItemCallBack()) {
+class ShopAdapter() : ListAdapter<Item, ShopViewHolder>(ShopListDiffItemCallBack()) {
 
 
     var onItemLongClikListener : ((Item)-> Unit)? = null

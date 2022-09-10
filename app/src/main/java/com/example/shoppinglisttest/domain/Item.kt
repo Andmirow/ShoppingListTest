@@ -1,6 +1,8 @@
 package com.example.shoppinglisttest.domain
 
-data class Item(
+import java.io.Serializable
+
+data class Item (
     val name : String,
     val count : Int,
     var enable : Boolean,
