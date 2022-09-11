@@ -8,8 +8,8 @@ import com.example.shoppinglisttest.domain.Item
 import com.example.shoppinglisttest.presentation.recycler_view_tools.ShopListDiffItemCallBack
 import com.example.shoppinglisttest.presentation.recycler_view_tools.ShopViewHolder
 
-const val ENABLE_TYPE = 1
-const val DISABLED_TYPE = 2
+private const val ENABLE_TYPE = 1
+private const val DISABLED_TYPE = 2
 class ShopAdapter() : ListAdapter<Item, ShopViewHolder>(ShopListDiffItemCallBack()) {
 
 

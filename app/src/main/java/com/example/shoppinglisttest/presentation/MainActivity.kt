@@ -15,16 +15,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglisttest.R
 import com.example.shoppinglisttest.domain.Item
 import com.example.shoppinglisttest.presentation.recycler_view_tools.ShopAdapter
-
-
-const val SET_ITEM = "set_Item"
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var recyclerView : RecyclerView
     lateinit var viewModel: MainViewModel
-    lateinit var addButtonView : Button
+    lateinit var addButtonView : FloatingActionButton
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         setRecyclerView()
 
         addButtonView.setOnClickListener {
-            val intent = Intent(this,AddItemActivity::class.java)
+            val intent = AddItemActivity.addItem(this)
             startActivity(intent)
         }
     }
@@ -53,8 +52,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.changeEnable(it)
         }
         adapter.onItemShotClikListener = {
-            val intent = Intent(this,AddItemActivity::class.java)
-            intent.putExtra(SET_ITEM,it.id)
+            val intent = AddItemActivity.setItem(this, it.id)
             startActivity(intent)
         }
 
