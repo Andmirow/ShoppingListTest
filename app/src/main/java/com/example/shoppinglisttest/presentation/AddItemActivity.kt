@@ -44,26 +44,26 @@ class AddItemActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_item)
-        nameView = findViewById(R.id.title)
-        countView = findViewById(R.id.count)
-        saveView = findViewById(R.id.save)
-        viewModel = ViewModelProvider(this).get(AddItemViewModel::class.java)
-        val oldItemId = intent.getIntExtra(SET_ITEM,-2)
-        if (oldItemId != -2){
-            oldItem = viewModel.findItem(oldItemId)
-            nameView.editText?.setText(oldItem!!.name)
-            countView.editText?.setText(oldItem!!.count.toString())
-        }
+//        nameView = findViewById(R.id.title)
+//        countView = findViewById(R.id.count)
+//        saveView = findViewById(R.id.save)
+//        viewModel = ViewModelProvider(this).get(AddItemViewModel::class.java)
+//        val oldItemId = intent.getIntExtra(SET_ITEM,-2)
+//        if (oldItemId != -2){
+//            oldItem = viewModel.findItem(oldItemId)
+//            nameView.editText?.setText(oldItem!!.name)
+//            countView.editText?.setText(oldItem!!.count.toString())
+//        }
     }
 
-    fun clickSave(view: View) {
-        if (oldItem != null){
-            val newItem = Item(nameView.editText?.text.toString(),countView.editText?.text.toString().toInt(),true,oldItem!!.id)
-            viewModel.setItem(newItem!!)
-        }else{
-            viewModel.addItem(nameView.editText.toString(),countView.editText.toString().toInt())
-        }
-        startActivity(Intent(this, MainActivity::class.java)) //redirect
-    }
+//    fun clickSave(view: View) {
+//        if (oldItem != null){
+//            val newItem = Item(nameView.editText?.text.toString(),countView.editText?.text.toString().toInt(),true,oldItem!!.id)
+//            viewModel.setItem(newItem!!)
+//        }else{
+//            viewModel.addItem(nameView.editText.toString(),countView.editText.toString().toInt())
+//        }
+//        startActivity(Intent(this, MainActivity::class.java)) //redirect
+//    }
 
 }
