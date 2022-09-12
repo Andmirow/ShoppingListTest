@@ -19,12 +19,11 @@ import com.google.android.material.textfield.TextInputLayout
 
 class AddItemActivity : AppCompatActivity(){
 
-    lateinit var nameView : EditText//TextInputLayout
-    lateinit var countView : EditText//TextInputLayout
+    lateinit var nameView : TextInputLayout
+    lateinit var countView : TextInputLayout
     lateinit var saveView : Button
     lateinit var viewModel: AddItemViewModel
     var oldItem : Item? = null
-
 
     companion object{
         private const val SET_ITEM = "set_Item"
@@ -45,36 +44,26 @@ class AddItemActivity : AppCompatActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.add_item)
-//        val mode = intent.getStringExtra(EXTRA_SCREEN_MODE)
-//        Log.d("ShopItemActivity", mode.toString())
+        nameView = findViewById(R.id.title)
+        countView = findViewById(R.id.count)
+        saveView = findViewById(R.id.save)
+        viewModel = ViewModelProvider(this).get(AddItemViewModel::class.java)
+        val oldItemId = intent.getIntExtra(SET_ITEM,-2)
+        if (oldItemId != -2){
+            oldItem = viewModel.findItem(oldItemId)
+            nameView.editText?.setText(oldItem!!.name)
+            countView.editText?.setText(oldItem!!.count.toString())
+        }
     }
-
-
-
-
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        setContentView(R.layout.add_item)
-//        nameView = findViewById(R.id.title)
-//        countView = findViewById(R.id.count)
-//        saveView = findViewById(R.id.save)
-//        viewModel = ViewModelProvider(this).get(AddItemViewModel::class.java)
-//        val oldItemId = intent.getIntExtra(SET_ITEM,-2)
-//        if (oldItemId != -2){
-//            oldItem = viewModel.findItem(oldItemId)
-//            nameView.setText(oldItem!!.name)      //editText?.setText(oldItem!!.name)
-//            countView.setText(oldItem!!.count)      //editText?.setText(oldItem!!.count)
-//        }
-//    }
-
 
     fun clickSave(view: View) {
         if (oldItem != null){
-            viewModel.setItem(oldItem!!)
+            val newItem = Item(nameView.editText?.text.toString(),countView.editText?.text.toString().toInt(),true,oldItem!!.id)
+            viewModel.setItem(newItem!!)
         }else{
-            viewModel.addItem(nameView.text.toString(),countView.text.toString().toInt())//    editText.toString(),countView.editText.toString().toInt())
+            viewModel.addItem(nameView.editText.toString(),countView.editText.toString().toInt())
         }
-        //redirect
+        startActivity(Intent(this, MainActivity::class.java)) //redirect
     }
 
 }
