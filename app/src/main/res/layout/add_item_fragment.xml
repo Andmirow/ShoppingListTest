@@ -50,7 +50,6 @@
         android:layout_height="wrap_content"
         android:layout_margin="30dp"
         android:text="@string/save"
-        android:onClick="clickSave"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
