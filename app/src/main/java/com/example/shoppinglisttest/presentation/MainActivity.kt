@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ListAdapter
 import android.widget.TextView
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -23,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recyclerView : RecyclerView
     lateinit var viewModel: MainViewModel
     lateinit var addButtonView : FloatingActionButton
+    private var fragmentContainer : FragmentContainerView? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,11 +34,20 @@ class MainActivity : AppCompatActivity() {
         addButtonView = findViewById(R.id.button_add_shop_item)
         viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
         setRecyclerView()
-
         addButtonView.setOnClickListener {
-            val intent = AddItemActivity.addItem(this)
-            startActivity(intent)
+            if (fragmentContainer==null){
+                val intent = AddItemActivity.addItem(this)
+                startActivity(intent)
+            }else{
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.fragment_container, AddItemFragment::class.java, null)
+                    .commit()
+            }
+
         }
+        fragmentContainer = findViewById(R.id.fragment_container)
+
     }
 
     fun setRecyclerView(){
@@ -52,8 +63,15 @@ class MainActivity : AppCompatActivity() {
             viewModel.changeEnable(it)
         }
         adapter.onItemShotClikListener = {
-            val intent = AddItemActivity.setItem(this, it.id)
-            startActivity(intent)
+            if (fragmentContainer==null){
+                val intent = AddItemActivity.setItem(this, it.id)
+                startActivity(intent)
+            }else{
+                supportFragmentManager
+                    .beginTransaction()
+                    .add(R.id.fragment_container, AddItemFragment::class.java, null)
+                    .commit()
+            }
         }
 
         viewModel.shopList.observe(this) {
