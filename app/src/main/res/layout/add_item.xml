@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:id="@+id/fragment_container_view"
-    android:name="com.example.shoppinglisttest.presentation.AddItemFragment"
     android:layout_height="match_parent"
     tools:context=".presentation.AddItemActivity"
     tools:layout="@layout/add_item_fragment" />

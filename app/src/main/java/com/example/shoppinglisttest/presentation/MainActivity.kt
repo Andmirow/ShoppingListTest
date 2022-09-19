@@ -9,6 +9,7 @@ import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.ListAdapter
 import android.widget.TextView
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -19,7 +20,7 @@ import com.example.shoppinglisttest.presentation.recycler_view_tools.ShopAdapter
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), AddItemFragment.HowToCloseFragment {
 
     private lateinit var recyclerView : RecyclerView
     lateinit var viewModel: MainViewModel
@@ -39,10 +40,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = AddItemActivity.addItem(this)
                 startActivity(intent)
             }else{
-                supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.fragment_container, AddItemFragment::class.java, null)
-                    .commit()
+                launchFragment(AddItemFragment.addItem())
             }
 
         }
@@ -58,6 +56,20 @@ class MainActivity : AppCompatActivity() {
 
     }
 
+
+
+    private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
+    }
+
+
+
+
+
     private fun setListener(adapter: ShopAdapter, rv: RecyclerView?) {
         adapter.onItemLongClikListener = {
             viewModel.changeEnable(it)
@@ -67,10 +79,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = AddItemActivity.setItem(this, it.id)
                 startActivity(intent)
             }else{
-                supportFragmentManager
-                    .beginTransaction()
-                    .add(R.id.fragment_container, AddItemFragment::class.java, null)
-                    .commit()
+                launchFragment(AddItemFragment.setItem(it.id))
             }
         }
 
@@ -95,6 +104,10 @@ class MainActivity : AppCompatActivity() {
 
         val itemTouchHelper = ItemTouchHelper(simCollBack)
         itemTouchHelper.attachToRecyclerView(rv)
+    }
+
+    override fun closeFragment() {
+        supportFragmentManager.popBackStack()
     }
 
 
