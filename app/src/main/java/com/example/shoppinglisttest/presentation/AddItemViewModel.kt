@@ -1,14 +1,16 @@
 package com.example.shoppinglisttest.presentation
 
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.shoppinglisttest.data.ItemRepositoryImpl
 import com.example.shoppinglisttest.domain.*
 
-class AddItemViewModel : ViewModel() {
+class AddItemViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = ItemRepositoryImpl
+    private val repository = ItemRepositoryImpl(application)
     private val findItemByIdClass = FindItemByIdClass(repository)
     private val addItemClass = AddItemClass(repository)
     private val setItemClass = SetItemClass(repository)

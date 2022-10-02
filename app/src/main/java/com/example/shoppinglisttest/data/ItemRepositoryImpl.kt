@@ -1,59 +1,49 @@
 package com.example.shoppinglisttest.data
 
+import android.app.Application
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
+import com.example.shoppinglisttest.data.database.AppDatabase
+import com.example.shoppinglisttest.data.database.MapperItem
 import com.example.shoppinglisttest.domain.Item
 import com.example.shoppinglisttest.domain.ItemRepository
 import java.lang.RuntimeException
 
-object ItemRepositoryImpl : ItemRepository {
+class ItemRepositoryImpl(application: Application) : ItemRepository {
 
-    private val repositoryLD = MutableLiveData<List<Item>>()
-    private val repository = sortedSetOf<Item>({o1, o2 -> o1.id.compareTo(o2.id)})
-
-    private var autoincroment = 0
-
-    init {
-        for (i in 0 until 10) {
-            val item = Item("Name $i", i, true)
-            addItem(item)
-        }
-    }
+    private val shopListDao = AppDatabase.getInstance(application).shopListDao()
 
     override fun addItem(item: Item) {
-        if (item.id == Item.UNDEFINED_ID){
-            item.id = autoincroment++
-        }
-        repository.add(item)
-        upList()
+        shopListDao.addItem(MapperItem.mapItemToDbModel(item))
     }
-
-
-    fun upList(){
-        repositoryLD.value = repository.toList()
-    }
-
-
 
 
     override fun getList(): LiveData<List<Item>> {
-        return repositoryLD
+        return MediatorLiveData<List<Item>>().apply {
+            this.addSource(shopListDao.getListItem()){
+                value = MapperItem.mapListDbItemToEmtity(it)
+            }
+        }
     }
 
 
     override fun remiveItem(item: Item) {
-        repository.remove(item)
-        upList()
+        shopListDao.deleteItem(item.id)
     }
 
+    fun remiveItem(itemId: Int) {
+        shopListDao.deleteItem(itemId)
+    }
+
+
     override fun setItem(item: Item) {
-        var findItem = findItemById(item.id)
-        remiveItem(findItem)
         addItem(item)
     }
 
     override fun findItemById(id: Int) : Item {
-        return repository.find { id == it.id } ?: throw RuntimeException()
+        val itemDb = shopListDao.getItem(id)
+        return MapperItem.mapDbItemToEmtity(itemDb)
     }
 
 
