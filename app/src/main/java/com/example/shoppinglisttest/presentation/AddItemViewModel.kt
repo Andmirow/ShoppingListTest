@@ -7,6 +7,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.shoppinglisttest.data.ItemRepositoryImpl
 import com.example.shoppinglisttest.domain.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class AddItemViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -14,6 +18,11 @@ class AddItemViewModel(application: Application) : AndroidViewModel(application)
     private val findItemByIdClass = FindItemByIdClass(repository)
     private val addItemClass = AddItemClass(repository)
     private val setItemClass = SetItemClass(repository)
+    private val scope = CoroutineScope(Dispatchers.IO)
+
+    private val _Item = MutableLiveData<Item>()
+    val shopItem: LiveData<Item>
+        get() = _Item
 
 
     private val _errorInput = MutableLiveData<Boolean>()
@@ -21,19 +30,26 @@ class AddItemViewModel(application: Application) : AndroidViewModel(application)
         get() {return _errorInput}
 
 
-    fun findItem(id : Int): Item{
-        return findItemByIdClass.findItemById(id)
+    fun findItem(id : Int){
+          scope.launch {
+              val item = findItemByIdClass.findItemById(id)
+              _Item.value = item
+        }
     }
 
     fun addItem(name: String, count : Int){
-        if(count>0 &&  !name.isBlank()){
-            val newItem = Item(name,count,true)
-            addItemClass.addItem(newItem)
+        scope.launch {
+            if(count>0 &&  !name.isBlank()){
+                val newItem = Item(name,count,true)
+                addItemClass.addItem(newItem)
+            }
         }
     }
 
     fun setItem(item: Item){
-        setItemClass.setItem(item)
+        scope.launch {
+            setItemClass.setItem(item)
+        }
     }
 
 
@@ -49,6 +65,8 @@ class AddItemViewModel(application: Application) : AndroidViewModel(application)
         return result
     }
 
-
-
+    override fun onCleared() {
+        super.onCleared()
+        scope.cancel()
+    }
 }

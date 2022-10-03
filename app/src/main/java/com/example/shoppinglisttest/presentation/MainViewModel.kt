@@ -5,6 +5,10 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.ViewModel
 import com.example.shoppinglisttest.data.ItemRepositoryImpl
 import com.example.shoppinglisttest.domain.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -14,10 +18,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     private val setItemClass = SetItemClass(repository)
     private val remiveItemClass = RemiveItemClass(repository)
 
+    private val scope = CoroutineScope(Dispatchers.IO)
+
     val shopList = getListItemClass.getList()
 
     fun deleteItem(item: Item){
-        remiveItemClass.remiveItem(item)
+        scope.launch {
+            remiveItemClass.remiveItem(item)
+        }
     }
 
     fun changeEnable(item: Item){
@@ -25,11 +33,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         setItem(newItem)
     }
 
-
     fun setItem(item: Item){
-        setItemClass.setItem(item)
+        scope.launch {
+            setItemClass.setItem(item)
+        }
     }
 
-
-
+    override fun onCleared() {
+        super.onCleared()
+        scope.cancel()
+    }
 }

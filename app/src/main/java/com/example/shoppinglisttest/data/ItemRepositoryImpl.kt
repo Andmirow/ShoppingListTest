@@ -14,7 +14,7 @@ class ItemRepositoryImpl(application: Application) : ItemRepository {
 
     private val shopListDao = AppDatabase.getInstance(application).shopListDao()
 
-    override fun addItem(item: Item) {
+    override suspend fun addItem(item: Item) {
         shopListDao.addItem(MapperItem.mapItemToDbModel(item))
     }
 
@@ -28,20 +28,20 @@ class ItemRepositoryImpl(application: Application) : ItemRepository {
     }
 
 
-    override fun remiveItem(item: Item) {
+    override suspend fun remiveItem(item: Item) {
         shopListDao.deleteItem(item.id)
     }
 
-    fun remiveItem(itemId: Int) {
+    suspend fun remiveItem(itemId: Int) {
         shopListDao.deleteItem(itemId)
     }
 
 
-    override fun setItem(item: Item) {
+    override suspend fun setItem(item: Item) {
         addItem(item)
     }
 
-    override fun findItemById(id: Int) : Item {
+    override suspend fun findItemById(id: Int) : Item {
         val itemDb = shopListDao.getItem(id)
         return MapperItem.mapDbItemToEmtity(itemDb)
     }

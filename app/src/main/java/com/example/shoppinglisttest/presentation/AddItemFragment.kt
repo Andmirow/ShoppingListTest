@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.example.shoppinglisttest.R
 import com.example.shoppinglisttest.domain.Item
@@ -58,11 +59,11 @@ class AddItemFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel =   ViewModelProvider(this).get(AddItemViewModel::class.java)
+        viewModel = ViewModelProvider(this).get(AddItemViewModel::class.java)
         val args = requireArguments()
         if (args.containsKey(SET_ITEM)) {
             val itemId = args.getInt(SET_ITEM,NOT_ID)
-            oldItem = viewModel.findItem(itemId)
+            viewModel.findItem(itemId)
         }
     }
 
@@ -76,10 +77,16 @@ class AddItemFragment : Fragment() {
         countView = view.findViewById(R.id.count)
         saveView = view.findViewById(R.id.save)
 
+        viewModel.shopItem.observe(viewLifecycleOwner, Observer { item ->
+            oldItem = item
+        })
+
         if (oldItem!=null){
             nameView.editText?.setText(oldItem!!.name)
             countView.editText?.setText(oldItem!!.count.toString())
         }
+
+
 
         saveView.setOnClickListener {
             if (oldItem != null){
