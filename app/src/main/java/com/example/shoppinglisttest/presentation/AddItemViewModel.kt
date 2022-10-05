@@ -1,6 +1,7 @@
 package com.example.shoppinglisttest.presentation
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -33,7 +34,9 @@ class AddItemViewModel(application: Application) : AndroidViewModel(application)
     fun findItem(id : Int){
           scope.launch {
               val item = findItemByIdClass.findItemById(id)
-              _Item.value = item
+              Log.d("item",item.name)
+              _Item.postValue(item)
+
         }
     }
 

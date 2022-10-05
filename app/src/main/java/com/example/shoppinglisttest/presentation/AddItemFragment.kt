@@ -2,6 +2,7 @@ package com.example.shoppinglisttest.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -79,12 +80,15 @@ class AddItemFragment : Fragment() {
 
         viewModel.shopItem.observe(viewLifecycleOwner, Observer { item ->
             oldItem = item
+            nameView.editText?.setText(item!!.name)
+            countView.editText?.setText(item!!.count.toString())
         })
 
-        if (oldItem!=null){
-            nameView.editText?.setText(oldItem!!.name)
-            countView.editText?.setText(oldItem!!.count.toString())
-        }
+
+//        if (oldItem!=null){
+//            nameView.editText?.setText(oldItem!!.name)
+//            countView.editText?.setText(oldItem!!.count.toString())
+//        }
 
 
 
