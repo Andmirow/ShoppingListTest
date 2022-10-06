@@ -7,11 +7,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
 import com.example.shoppinglisttest.R
+import com.example.shoppinglisttest.databinding.ActivityMainBinding
 
 
 class AddItemActivity : AppCompatActivity(), AddItemFragment.HowToCloseFragment{
 
     private var itemfragmentContainer : FragmentContainerView? = null
+
+
 
     companion object{
         private const val SET_ITEM = "set_Item"
